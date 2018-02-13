@@ -1,0 +1,8 @@
+import _pickle as pickle
+
+with open("..\\littleroot_pyMap.pkl","rb") as file:
+	pklMap = pickle.load(file)
+
+path = AStar(pklMap,pklMap[19][12],pklMap[12][2])
+path.process()
+
