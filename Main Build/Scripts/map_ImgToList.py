@@ -1,10 +1,13 @@
-# Script for image to multiDimensional list
+
+###########################################################
+# This script is used to convert a pixel map to a 2D list #
+###########################################################
+
 
 import cv2
 import os
 import Tile_Classes as tc
 import copy
-
 
 # RULES FOR MAKING AN AREA:
 # Area must be a square shape
@@ -51,3 +54,5 @@ for a in area:
     print(a)
     print()
                 
+
+# TODO: Automatically save the area in pickle format so it may be loaded elsewhere.
