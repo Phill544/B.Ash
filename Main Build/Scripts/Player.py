@@ -1,4 +1,11 @@
 
+###########################################################
+# The player class keeps track of information on the      #
+# player's current state. The information in then used    #
+# for other processes.                                    #
+###########################################################
+
+
 class Player:
 
     # pos # player's pos on current map
