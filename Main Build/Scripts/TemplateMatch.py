@@ -2,6 +2,14 @@ import cv2 # To compare images
 import numpy as np # To aid cv2
 import os # for going through directories
 
+
+###########################################################
+# This script handles the template matching               #
+###########################################################
+
+
+
+# A test function, do not use.
 def TemplateTest(image):
 
     screenshot = np.asarray(image,dtype=np.uint8) # "dtype=np.uint8" is needed as it treats the pillow screenshot as the correct colours
@@ -22,6 +30,9 @@ def TemplateTest(image):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+
+
+# Grabs the known areas in the overworld
 # Use this function for calling from other modules.
 def GrabAreas():
     lAreas = {}
@@ -39,6 +50,11 @@ def __GrabAreas(areas, currentPath):
         if os.path.isdir(currentPath + "\\" + obj):
             __GrabAreas(areas,currentPath + "\\" + obj)
 
+
+
+
+
+# Tries to locate the current area the player is in if found draws on a window where found  
 def MatchAreasDraw(screenshot, templates):
     
     img_np = np.asarray(screenshot,dtype=np.uint8)
@@ -57,7 +73,8 @@ def MatchAreasDraw(screenshot, templates):
                 cv2.imshow('detected', img_np)
                 cv2.waitKey(1)
                 return True
-            
+
+# Tries to locate the current area the player is in.            
 def MatchArea(screenshot, templates):
     
     img_np = np.asarray(screenshot,dtype=np.uint8)
@@ -73,6 +90,12 @@ def MatchArea(screenshot, templates):
             return templ_name[:-4]
     return None
 
+
+
+
+
+
+# Does a single template match.
 def SingleMatch(img,template, _threshold = 0.99):
 
     # Make this WAY more efficient if I store the images as grayscale by default
