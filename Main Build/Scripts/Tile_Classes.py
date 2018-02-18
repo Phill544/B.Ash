@@ -1,5 +1,10 @@
 import cv2
 
+###########################################################
+# These classes are used as part of the pyGrids for       #
+# a more accurate player movement.                        #
+###########################################################
+
 class Tile:
     # Basic Tile Class
 
@@ -45,9 +50,12 @@ class Tile:
     def __ge__(self, other):
         return(self.pos >= other.pos)
 
+# A transition tile is a tile that when walked on, will change the player's
+# current region.
 class Transition(Tile):
 
     newArea = ""
+    # TODO: add what tile coord the player will be on
 
     def __init__(self, p , w, i, f, a ):
         Tile.__init__(self, p , w, i, f)
