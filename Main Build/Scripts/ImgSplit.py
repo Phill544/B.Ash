@@ -4,6 +4,27 @@ import cv2
 import math
 import os
 
+
+## This module's purpose is to take an image and split it into 16x16 tiles.
+## The module also contains functions used to manipulate an image before splitting
+## And also manipulation of tiles after being split.
+
+
+#####################################################################
+#                                                                   #
+# The three main functions, used to split the image into tiles.     #
+#                                                                   #
+# Img_split(img,dir) - Mostly used for debugging. Saves the split   #
+#                   into a folder.                                  #
+#                                                                   #
+# Img_split_to_memory_grid(img) - Returns a 2D list of tiles where  #
+#                           [0][0] is the top left of the image     #
+#                                                                   #
+#                                                                   #
+# Img_split_to_memory_list(img) - Returns a list of the tiles.      #
+#                                                                   #
+#####################################################################
+
 # Splits image into 16x16 tiles and saves them to a relative folder to current working directory
 def Img_split(img,dir):
     img_shape = img.shape
@@ -47,12 +68,23 @@ def Img_split_to_memory_list(img):
             tiles.append(cropped_img)
     return tiles
 
+
+#####################################################################
+#                                                                   #
+# Tile and image manipulation functions                             #
+#                                                                   #
+#####################################################################
+
+
 # returns the input image minus the specified amount of pixels from the top of the image
 def trim_top_pixels(img, amount):
     return img[amount:][0:]
+
+
 # returns the input image minus the specified amount of pixels from the bottom of the image
 def trim_bottom_pixels(img, amount):
     return img[0:][0:-amount]
+
 
 # removes any identical images inside a folder, therefore keeping one copy
 def remove_duplicates(dir):
@@ -66,6 +98,8 @@ def remove_duplicates(dir):
             unique.append(filehash)
         else:
             os.remove(filename)
+
+            
 
 # removes all images that aren't unique to the folder, ie if there are two of the exact same images, both will be deleted
 def keep_uniques(dir):
@@ -93,6 +127,8 @@ def keep_uniques(dir):
             for file in x[1]:
                 os.remove(file)
     os.chdir(olddir)
+
+    
 
 # Returns a list of images which are unique to the input list, any images that have a matches are removed
 def keep_uniques_memory(list_tiles): 
