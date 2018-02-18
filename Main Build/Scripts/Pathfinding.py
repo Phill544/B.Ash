@@ -1,6 +1,11 @@
 import Tile_Classes as tc
 import heapq
 
+##############################################################
+# This script is used to calculate a path between two points #
+##############################################################
+
+
 # Start with the starting cell in the open list, and nothing in the closed list.
 
 # Remove the cell with the lowest
