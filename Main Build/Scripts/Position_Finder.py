@@ -8,10 +8,19 @@ import ScreenGrab as SG
 import _pickle as pickle
 import hashlib # Used for finding out the player's direction
 
+###########################################################
+# This script is used to find the player's position in    #
+# the current map.                                        #
+###########################################################
+
+#####################################
+# How this script works:
+#####################################
 # Load the area map into memory
 # Grab the emulator image and split it into tiles
 # Compare each tile of the emulator to the "unique" tiles of the area map
 # If match is found, calculate player's position based on play-tile distance
+#####################################
 
 TILE_SIZE = 16
 
@@ -20,12 +29,20 @@ def Load_Area(dir):
         area = pickle.load(file)
     return area
 
+
+
+# Takes the emulator image, trims it, then splits it into tiles
 def Emulator_Split(img):
-    
+    # Trimming the top and bottom 8 pixels is important as it aligns
+    # the tiles with each reference image.
     img = IS.trim_top_pixels(img, 8)
     img = IS.trim_bottom_pixels(img, 8)
     return IS.Img_split_to_memory_grid(img)
 
+
+
+# Compares every tile taken from the emulator screenshot, and compares it
+# to all known unique tiles in the map area.
 def Compare_Emulator_To_pyGrid(pyGrid,emTiles):
     for row in pyGrid:
         for t in row:
@@ -42,6 +59,10 @@ def Compare_Emulator_To_pyGrid(pyGrid,emTiles):
                         else:
                             return None
 
+
+
+
+# The main function responsible for finding the player's position.
 def FindPos(img, pyGrid, emTiles):
 
     World_And_Emu_Pos = Compare_Emulator_To_pyGrid(pyGrid, emTiles)
@@ -50,16 +71,19 @@ def FindPos(img, pyGrid, emTiles):
         return None
     PlayerPos = PlayerToWorld(World_And_Emu_Pos) #Finding player's position in the world
     emPos = pyGridToWindow(World_And_Emu_Pos[1], TILE_SIZE)
-    cv2.rectangle(img,(emPos[0],emPos[1] + 8) #Plus 8 because we cut off the top of the emulator window when doing tile calculations, so when drawing to the screen we need to offset the y axis by 8
+    cv2.rectangle(img,(emPos[0],emPos[1] + 8) #Plus 8 because we cut off the top of the emulator window when doing tile calculations, so when drawing to the screen we need to offset the y axis
                   ,(emPos[0] + TILE_SIZE, emPos[1] + TILE_SIZE + 8)
                   ,(0,255,255),2) 
     cv2.imshow('detected', img)
     cv2.waitKey(1)
     return PlayerPos
 
+
+# Converts the "pyGrid" coordinates to the emulator's coordinates
 def pyGridToWindow(coords,scale):
     return (coords[0]*scale, coords[1]*scale)
 
+# Finds the player's position in the world by comparing the player's emulator position to a known position of a unique tile.
 def PlayerToWorld(uniquePosInfo):
 
     PLAYER_WINDOW_POS = (8,5) 
@@ -73,6 +97,9 @@ def PlayerToWorld(uniquePosInfo):
 
     return playerGridPos
 
+
+
+# Finds which way the player is facing on the world map.
 def FindPlayerFace(window_id):
     img = SG.GetScreenSnippit(window_id,115,74,10,4)
     imgHash = hashlib.md5(img.tostring()).hexdigest()
