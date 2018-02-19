@@ -140,24 +140,24 @@ def Button_B():
     ReleaseKey(X)
 
 def Button_UP():
-    PressKey(UArrow)
+    PressKey(I)
     time.sleep(secs)
-    ReleaseKey(UArrow)
+    ReleaseKey(I)
 
 def Button_DOWN():
-    PressKey(DArrow)
+    PressKey(K)
     time.sleep(secs)
-    ReleaseKey(DArrow)
+    ReleaseKey(K)
 
 def Button_LEFT():
-    PressKey(LArrow)
+    PressKey(J)
     time.sleep(secs)
-    ReleaseKey(LArrow)
+    ReleaseKey(J)
 
 def Button_RIGHT():
-    PressKey(RArrow)
+    PressKey(L)
     time.sleep(secs)
-    ReleaseKey(RArrow)
+    ReleaseKey(L)
 
 def Button_START():
     PressKey(Enter)
