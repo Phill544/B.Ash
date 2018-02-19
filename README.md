@@ -22,7 +22,7 @@ Controls:
     
     left - j
     
-   right - l
+    right - l
  
   select - z
   
