@@ -12,7 +12,7 @@ But we're working towards the goal of a fairly smart bot who can move himself ar
 
 ## How to use:
 
-Controls: 
+### Controls: 
 
   Movement - 
   
