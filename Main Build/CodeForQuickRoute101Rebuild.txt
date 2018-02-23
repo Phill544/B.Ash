@@ -1,0 +1,54 @@
+Other type tile found, need manual creation at: 9, 0
+Other type tile found, need manual creation at: 10, 0
+Other type tile found, need manual creation at: 11, 0
+Other type tile found, need manual creation at: 12, 0
+Other type tile found, need manual creation at: 8, 6
+Other type tile found, need manual creation at: 9, 6
+Other type tile found, need manual creation at: 10, 6
+Other type tile found, need manual creation at: 11, 6
+Other type tile found, need manual creation at: 3, 7
+Other type tile found, need manual creation at: 4, 7
+Other type tile found, need manual creation at: 5, 7
+Other type tile found, need manual creation at: 6, 7
+Other type tile found, need manual creation at: 6, 9
+Other type tile found, need manual creation at: 9, 13
+Other type tile found, need manual creation at: 10, 13
+Other type tile found, need manual creation at: 11, 13
+Other type tile found, need manual creation at: 12, 13
+Other type tile found, need manual creation at: 11, 19
+Other type tile found, need manual creation at: 12, 19
+
+
+area[0][9] = tc.TransFromUnknown(area[0][9], True, False, 'n', 'oldale')
+area[0][10] = tc.TransFromUnknown(area[0][10], True, False, 'n', 'oldale')
+area[0][11] = tc.TransFromUnknown(area[0][11], True, False, 'n', 'oldale')
+area[0][12] = tc.TransFromUnknown(area[0][12], True, False, 'n', 'oldale')
+
+area[19][11] = tc.TransFromUnknown(area[19][11], True, False, 's', 'littleroot')
+area[19][12] = tc.TransFromUnknown(area[19][12], True, False, 's', 'littleroot')
+
+// Change so the player may route from the north and jump over
+
+area[6][8] = tc.TileFromUnknown(area[6][8], False,False, 'n')
+area[6][9] = tc.TileFromUnknown(area[6][9], False,False, 'n')
+area[6][10] = tc.TileFromUnknown(area[6][10], False,False, 'n')
+area[6][11] = tc.TileFromUnknown(area[6][11], False,False, 'n')
+
+area[7][3] = tc.TileFromUnknown(area[7][3], False,False, 'n')
+area[7][4] = tc.TileFromUnknown(area[7][4], False,False, 'n')
+area[7][5] = tc.TileFromUnknown(area[7][5], False,False, 'n')
+area[7][6] = tc.TileFromUnknown(area[7][6], False,False, 'n')
+
+area[9][6] = tc.TileFromUnknown(area[9][6], False,True, '')
+
+area[13][9] = tc.TileFromUnknown(area[13][9], False,False, 'n')
+area[13][10] = tc.TileFromUnknown(area[13][10], False,False, 'n')
+area[13][11] = tc.TileFromUnknown(area[13][11], False,False, 'n')
+area[13][12] = tc.TileFromUnknown(area[13][12], False,False, 'n')
+
+
+area[6][7].unique_img = cv2.imread("..\\route101_unq_tiles\\" + str(area[6][7].pos[1]) + "," + str(area[6][7].pos[0]) + ".bmp")
+
+area[7][7].unique_img = cv2.imread("..\\route101_unq_tiles\\" + str(area[7][7].pos[1]) + "," + str(area[7][7].pos[0]) + ".bmp")
+
+area[9][6].unique_img = cv2.imread("..\\route101_unq_tiles\\" + str(area[9][6].pos[1]) + "," + str(area[9][6].pos[0]) + ".bmp")
