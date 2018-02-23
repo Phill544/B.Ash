@@ -55,11 +55,12 @@ class Tile:
 class Transition(Tile):
 
     newArea = ""
-    # TODO: add what tile coord the player will be on
+    newCoord = (-1,-1)
 
-    def __init__(self, p , w, i, f, a ):
+    def __init__(self, p , w, i, f, a, c ):
         Tile.__init__(self, p , w, i, f)
         self.newArea = a
+        self.newCoord = c
 
     #Definitions for pathfinding
     def __lt__(self, other):
@@ -91,8 +92,8 @@ class Obstacle(Tile):
         self.ob_type = _ob_type
    
 
-def TransFromUnknown(pos,walkable,interactable, facing, newArea):    
-    return Transition(pos, walkable, interactable, facing, newArea)
+def TransFromUnknown(pos,walkable,interactable, facing, newArea, newCoord):    
+    return Transition(pos, walkable, interactable, facing, newArea, newCoord)
 
 def TileFromUnknown(pos,walkable,interactable, facing):
     return Tile(pos, walkable, interactable, facing)

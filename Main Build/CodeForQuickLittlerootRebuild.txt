@@ -9,15 +9,15 @@ Other type tile found, need manual creation at: 9, 17
 Other type tile found, need manual creation at: 8, 18
 
 
-area[17][9].unique_img = cv2.imread("..\\littleroot_tiles\\" + str(area[17][9].pos[1]-1) + "," + str(area[17][9].pos[0]-1) + ".bmp")
+area[16][9].unique_img = cv2.imread("..\\littleroot_tiles\\" + str(area[16][9].pos[1]) + "," + str(area[16][9].pos[0]-1) + ".bmp")
 
-area[0][13] = tc.TransFromUnknown(area[0][13], True, False, 'n', 'route_101')
-area[0][12] = tc.TransFromUnknown(area[0][12], True, False, 'n', 'route_101')
-area[9][7] = tc.TransFromUnknown(area[9][7], True, False, 'n', 'male_room')
-area[9][16] = tc.TransFromUnknown(area[9][16], True, False, 'n', 'female_room')
-area[17][9] = tc.TransFromUnknown(area[17][9], True, False, 'n', "lab")
-area[9][9] = tc.TileFromUnknown(area[9][9], False,True, 'swn')
-area[9][14] = tc.TileFromUnknown(area[9][14], False,True, 'sen')
-area[14][17] = tc.TileFromUnknown(area[14][17], False, True, "")
-area[18][8] = tc.TileFromUnknown(area[18][8], False, True, 'ewn')
+area[0][13] = tc.TransFromUnknown(area[0][13], True, False, 'n', 'route_101', (11,19))
+area[0][12] = tc.TransFromUnknown(area[0][12], True, False, 'n', 'route_101',(12,19))
+area[8][7] = tc.TransFromUnknown(area[8][7], True, False, 'n', 'male_room', (-1,-1))
+area[8][16] = tc.TransFromUnknown(area[8][16], True, False, 'n', 'female_room', (-1,-1))
+area[16][9] = tc.TransFromUnknown(area[16][9], True, False, 'n', "lab", (-1,-1))
+area[8][9] = tc.TileFromUnknown(area[8][9], False,True, 'swn')
+area[8][14] = tc.TileFromUnknown(area[8][14], False,True, 'sen')
+area[13][17] = tc.TileFromUnknown(area[13][17], False, True, "")
+area[17][8] = tc.TileFromUnknown(area[17][8], False, True, 'ewn')
 

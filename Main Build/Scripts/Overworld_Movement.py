@@ -225,3 +225,32 @@ class Overworld_Movement():
             return True"""
         return False
         
+    # Returns the current tile the player is standing on
+    def GetCurrentTile(self):
+        return self.area[self.player.pos[1]][self.player.pos[0]]
+
+    def TransitionToArea(self):
+
+        currentTile = self.GetCurrentTile()
+        if isinstance(currentTile, tc.Transition):
+
+            # We must step into the new zone, then load the new map
+
+            if currentTile.playerFace == 'n':
+                self.Move_Up()
+            elif currentTile.playerFace == 's':
+                self.Move_Down()
+            elif currentTile.playerFace == 'e':
+                self.Move_Right()
+            elif currentTile.playerFace == 'w':
+                self.Move_Left()
+
+            self.player.currentArea = currentTile.newArea
+            self.player.pos = currentTile.newCoord
+            print(currentTile.newArea)
+
+            with open("..\\" + currentTile.newArea + "_pyMap.pkl","rb") as file:
+                self.area = pickle.load(file)
+        else:
+            print("No transition tile found at player location")
+            
