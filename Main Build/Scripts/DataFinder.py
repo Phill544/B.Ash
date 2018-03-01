@@ -54,7 +54,7 @@ class DataFinder():
         ptr = self.mr.FindPointerData(PTR_LOC)
         data = self.mr.FindOffsetData(ptr, OFFSET, 1)
 
-        return data[0]
+        return self.areas[data[0]]
 
 
     def FindFacing(self):
@@ -64,8 +64,9 @@ class DataFinder():
         ptr = self.mr.FindPointerData(PTR_LOC)
         data = self.mr.FindOffsetData(ptr, OFFSET, 1)
 
-        return data[0]    
+        return self.facing[data[0]]
 
+'''
 print("Hit enter to start")
 input()
 
@@ -74,6 +75,6 @@ df = DataFinder()
 while True:
     time.sleep(1)
     print(df.FindCoords())
-    print("The current area is: " + df.areas[df.FindArea()])
-    print(" Player Facing: " + df.facing[df.FindFacing()])
-    
+    print("The current area is: " + df.FindArea())
+    print(" Player Facing: " + df.FindFacing())
+   ''' 

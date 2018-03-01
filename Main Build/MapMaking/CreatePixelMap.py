@@ -6,8 +6,20 @@
 
 import cv2
 import os
-import Tile_Classes as tc
 import copy
+import importlib
+import _pickle as pickle
+
+import sys
+sys.path.insert(0, '..\\Scripts\\')
+
+import Tile_Classes as tc
+
+def dequote(s):
+    if (s[0] == s[-1]) and s.startswith(("'", '"')):
+        return s[1:-1]
+    return s  
+
 
 # RULES FOR MAKING AN AREA:
 # Area must be a square shape
@@ -16,8 +28,8 @@ path = ""
 while(os.path.isfile(path) == False):
     print("Give absolute path to image.")
     path = input()
-
-
+    path = dequote(path)
+ 
 img = cv2.imread(path)
 
 WHITE = 255
@@ -50,9 +62,18 @@ for yindx,col in enumerate(img):
             # Create none type in position and update it manually
     area.append(row)
 
-for a in area:
-    print(a)
-    print()
-                
+
+print("Give the name of the map you want to build")
+s = input()
+s = dequote(s)
+s = s.lower()
+pickleSave = s + "_pyMap.pkl"
+s = s + "_build.py"
+
+exec(open(s).read())
+
 
 # TODO: Automatically save the area in pickle format so it may be loaded elsewhere.
+
+with open(".\\" + pickleSave,"wb") as file:
+    pickle.dump(area,file)

@@ -29,11 +29,15 @@ worldLocation = df.FindArea()
 
 location = PF.Load_Area("..\\" + worldLocation + "_pyMap.pkl")
 
+
 player = Player.Player()
 player.pos = df.FindCoords()
+player.currentArea = worldLocation
 player.facing = df.FindFacing()
 
 player.printInfo()
+
+print(player.pos)
 
 
 
@@ -42,31 +46,20 @@ time.sleep(3)
 
 movement = om.Overworld_Movement(player, location, window_id)
 
-movement.set_endPos((12,0))
+movement.set_endPos((10,0))
 movement.Route_Player()
 
 time.sleep(2)
 
 movement.TransitionToArea()
 
-movement.set_endPos((10,1))
+player.pos = df.FindCoords()
+worldLocation = df.FindArea()
+player.currentArea = worldLocation
+player.facing = df.FindFacing()
+
+movement.player = player
+
+movement.set_endPos((9,1))
 movement.Route_Player()
 
-
-
-'''
-movement = om.Overworld_Movement(player, location, window_id)
-endPoints = [(9,18),(7,10),(16,10)]
-previousChoice = (7,10)
-
-while True:
-
-    dest = random.choice(endPoints)
-    while dest == previousChoice:
-        dest = random.choice(endPoints)
-    movement.set_endPos(dest)
-    print("Moving to: " + str(dest))
-    previousChoice = dest
-    movement.Route_Player()
-
-'''

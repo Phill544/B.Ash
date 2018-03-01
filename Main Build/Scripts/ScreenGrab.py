@@ -14,7 +14,7 @@ import numpy
 # TODO: Move this function to a more accurate module.
 def StartEmulator():
     try:
-        os.startfile(r"..\Emulator\VisualBoyAdvance-1.8.0-511.exe")
+        os.startfile(r"..\Emulator\VisualBoyAdvance.exe")
         print('[+] Emulator Started')
     except:
         print('[-] Error loading emulator.')

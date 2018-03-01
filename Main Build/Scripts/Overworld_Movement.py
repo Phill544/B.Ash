@@ -12,6 +12,7 @@ import ImgSplit as IS
 import os
 import cv2
 
+
 ###########################################################
 # This script contains the movement class                 #
 ###########################################################
@@ -49,8 +50,20 @@ class Overworld_Movement():
     # The main function for this class. Route player attempts to move the player
     # to their current destination.
     def Route_Player(self):
+
+        test1 = self.area[self.player.pos[1]][self.player.pos[0]]
+        test2 = self.area[self.endPos[1]][self.endPos[0]]
+        
+        print(self.area[self.player.pos[1]][self.player.pos[0]])
+        print(self.area[self.endPos[1]][self.endPos[0]])
+
+        print(test1.tile_print())
+        print(test2.tile_print())
+        
         aStar = Pathfinding.AStar(self.area, self.area[self.player.pos[1]][self.player.pos[0]], self.area[self.endPos[1]][self.endPos[0]])
+        print(aStar)
         self.route = aStar.process()
+        print(self.route)
 
         while len(self.route) > 0:
             nextMove = self.route.pop()

@@ -57,6 +57,10 @@ class AStar:
             cell = cell.parent
             path_list.append(cell.pos)
             print ('path: cell: %d,%d' % (cell.pos[0], cell.pos[1]))
+
+        if path_list == None:
+            print("NO PATH CREATED. CHECK WHETHER THE DESTINATION FILE IS WALKABLE OR THAT THERE IS A PATH")
+        
         return path_list
 
     def update_cell(self, adj, cell):
