@@ -9,6 +9,7 @@ import numpy as NP
 import time
 import Player
 import Overworld_Movement as om
+import DataFinder
 
 import random # JUST FOR TESTING PURPOSES
 
@@ -20,33 +21,24 @@ time.sleep(1) # Makes script wait to ensure that it can find the handle -- May n
 window_id = SG.FindWindow()
 input("Once you load the rom press Enter to Continue")
 
-worldLocation = None
-areas = TM.GrabAreas()
 
-print("Please move around until a location is detected")
+df = DataFinder.DataFinder()
 
-while worldLocation == None:
-    image = SG.GetScreenShot(window_id)
-    worldLocation = TM.MatchArea(image,areas)
+worldLocation = df.FindArea()
 
-
-print("Location detected at: " + worldLocation)
-input("Press enter and select the emulator within 3 seconds to continue")
-time.sleep(3)
 
 location = PF.Load_Area("..\\" + worldLocation + "_pyMap.pkl")
-player = Player.Player()
-emTiles = PF.Emulator_Split(image)
-player.pos = PF.FindPos(image, location, emTiles)
 
-player.facing = PF.FindPlayerFace(window_id)
+player = Player.Player()
+player.pos = df.FindCoords()
+player.facing = df.FindFacing()
 
 player.printInfo()
 
+
+
 input("Ready to try transitioning. Press enter and select the emulator within 3 seconds to continue")
 time.sleep(3)
-
-player.pos = (9,7)
 
 movement = om.Overworld_Movement(player, location, window_id)
 
