@@ -9,7 +9,7 @@ import numpy as NP
 import time
 import Player
 import Overworld_Movement as om
-import DataFinder
+import PlayerInfo
 
 import random # JUST FOR TESTING PURPOSES
 
@@ -22,23 +22,20 @@ window_id = SG.FindWindow()
 input("Once you load the rom press Enter to Continue")
 
 
-df = DataFinder.DataFinder()
+pinfo = PlayerInfo.PlayerInfo()
 
-worldLocation = df.FindArea()
+worldLocation = pinfo.FindArea()
 
 
 location = PF.Load_Area("..\\" + worldLocation + "_pyMap.pkl")
 
 
 player = Player.Player()
-player.pos = df.FindCoords()
+player.pos = pinfo.FindCoords()
 player.currentArea = worldLocation
-player.facing = df.FindFacing()
+player.facing = pinfo.FindFacing()
 
 player.printInfo()
-
-print(player.pos)
-
 
 
 input("Ready to try transitioning. Press enter and select the emulator within 3 seconds to continue")
@@ -53,10 +50,10 @@ time.sleep(2)
 
 movement.TransitionToArea()
 
-player.pos = df.FindCoords()
-worldLocation = df.FindArea()
+player.pos = pinfo.FindCoords()
+worldLocation = pinfo.FindArea()
 player.currentArea = worldLocation
-player.facing = df.FindFacing()
+player.facing = pinfo.FindFacing()
 
 movement.player = player
 
