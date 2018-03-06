@@ -30,7 +30,7 @@ def HexValsToChars(data):
 
 
 #Converts data from little to big endian
-def FlipDataEndian(data):
+def FlipDataEndianOLD(data):
 
     if len(data) % 4 != 0:
         print("Trying to flip an uneven amount of bytes. CHECK FLIPDATAENDIAN")
@@ -53,6 +53,8 @@ def FlipDataEndian(data):
 
     return flippedData                         
 
+def FlipDataEndian(data):
+    return "".join(reversed([data[i:i+2] for i in range(0, len(data), 2)]))
 
 #Use this when python is shortening your starting hex values. Ie if you need to read 4 values '003f' but it is being shortened to '3f'
 def AddZeros(strVal):

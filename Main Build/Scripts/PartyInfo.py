@@ -6,6 +6,8 @@ class Pokemon():
     def __init__(self, pokemon_data):
 
         # Dictionary of data names and their lengths in bytes
+
+        #TODO: Change this to an enum class
         self.dataSizes = {
             "P_VALUE"           : 4,
             "OT_ID"             : 4,
@@ -163,7 +165,7 @@ class Pokemon():
 class DataSubstructure():
 
     def __init__(self, pVal, ot_id , data):
-
+        #TODO: Change this to enum class
         self.structure_order = {
              0  :    "GAEM",  1  :    "GAME",
              2  :    "GEAM",  3  :    "GEMA",
@@ -213,14 +215,22 @@ class DataSubstructure():
 
             if char == 'G':
                 #decode as growth
+                #print("data: " + data[bytePos:bytePos + 24])
+                #print("length: " + str(len(data[bytePos:bytePos + 24])))
                 self.DecodeGrowth(data[bytePos:bytePos + 24]) # 24 Because 12 bytes takes 24 characters
             elif char == 'A':
                 #decode as attacks
+                #print("data: " + data[bytePos:bytePos + 24])
+                #print("length: " + str(len(data[bytePos:bytePos + 24])))
                 self.DecodeAttacks(data[bytePos:bytePos + 24])
             elif char == 'E':
+                #print("data: " + data[bytePos:bytePos + 24])
+                #print("length: " + str(len(data[bytePos:bytePos + 24])))
                 #Decode as Evs
                 self.DecodeEVsAndCond(data[bytePos:bytePos + 24])
             elif char == 'M':
+                #print("data: " + data[bytePos:bytePos + 24])
+                #print("length: " + str(len(data[bytePos:bytePos + 24])))
                 # Decode as Miscellaneous
                 self.DecodeMisc(data[bytePos:bytePos + 24])
 
@@ -277,8 +287,9 @@ class DataSubstructure():
         
         #Make sure the isn't any zeros missing off the front
         if len(decodedVal) != 8:
-            decodedVal = ("0"*(8-len(decodedVal))) + decodedVal         
-        return (int(decodedVal[0:4],16),int(decodedVal[4:8],16))
+            decodedVal = ("0"*(8-len(decodedVal))) + decodedVal
+        # Because of little endian, values must be returned backwards
+        return (int(decodedVal[4:8],16),int(decodedVal[0:4],16))
 
     #PP results may be returned in the wrong order?
     def DecodeQuad(self,rawVal):
@@ -287,18 +298,17 @@ class DataSubstructure():
         if len(decodedVal) != 8:
             decodedVal = ("0"*(8-len(decodedVal))) + decodedVal
             
-        # Moves seem to need to be sent out of order so that move order: 2143. Probably something to do with little endian byte type
-        return [ int(decodedVal[2:4],16), int(decodedVal[0:2],16),
-                 int(decodedVal[6:8],16),int(decodedVal[4:6],16)]        
+        # Because of little endian, values must be returned backwards
+        return [ int(decodedVal[6:8],16), int(decodedVal[4:6],16) ,
+                 int(decodedVal[2:4],16), int(decodedVal[0:2],16)]        
 
 
     def DecodeSingle(self, rawVal):
         flippedVal = util.FlipDataEndian(rawVal)
         decodedVal = hex((self.key ^ int(flippedVal, 16)))[2:]
         if len(decodedVal) != 8:
-            decodedVal = ("0"*(8-len(decodedVal))) + decodedVal  
-        rearrangedVal = decodedVal[4:8] + decodedVal[0:4]
-        return int(rearrangedVal,16)        
+            decodedVal = ("0"*(8-len(decodedVal))) + decodedVal
+        return int(decodedVal,16)        
 
 
     
@@ -309,23 +319,80 @@ class PartyInfo():
     def __init__(self):
 
         self.PTR_LOC = 0x005AF940
-        self.pos1_offset = 0x4360
-        self.pos2_offset = 0x43C4
-        self.pos3_offset = 0x4428
-        self.pos4_offset = 0x448C
-        self.pos5_offset = 0x44F0
-        self.pos6_offset = 0x4554
+        self.offsets = [0x4360,0x43C4,0x4428,0x448C,0x44F0,0x4554]
 
         self.mr = MR.MemoryReader()
         self.base_ptr = self.mr.FindPointerData(self.PTR_LOC)
 
+        self.pokeList = [0]*6
+
         self.UpdateParty()
 
     def UpdateParty(self):
+        self.pokeCount = self.CountParty()
 
-        self.poke1 = Pokemon(self.mr.FindOffsetData(self.base_ptr, self.pos1_offset, 100).hex())
-        self.poke2 = Pokemon(self.mr.FindOffsetData(self.base_ptr, self.pos2_offset, 100).hex())
+        for x in range(0,self.pokeCount):
+            self.pokeList[x] = Pokemon(self.mr.FindOffsetData(self.base_ptr, self.offsets[x], 100).hex())
 
     def Print_Info(self):
-        self.poke1.print_basic_data()
-        self.poke2.print_basic_data()
+        for x in range(0,self.pokeCount):
+            self.pokeList[x].print_basic_data()
+
+
+    def CountParty(self):
+        count  = 0
+
+        for offset in self.offsets:
+            val = self.mr.FindOffsetData(self.base_ptr, self.offsets[count], 4).hex()
+            if val == '00000000':
+                return count
+            count += 1
+        return count
+
+
+
+class OpponentPartyInfo():
+    
+    def __init__(self):
+
+        self.PTR_LOC = 0x005AF940
+        self.offsets = [0x45C0,0x4624,0x4688,0x46EC,0x4750,0x47B4]
+
+        self.mr = MR.MemoryReader()
+        self.base_ptr = self.mr.FindPointerData(self.PTR_LOC)
+
+        self.pokeList = [0]*6
+
+        self.pValPos1 = '00000000' # This is used to check whether a new battle has commenced. (A new p value for the first pokemon means that it is a different battle)
+
+        self.UpdateParty()
+    
+    def UpdateParty(self):
+        self.pokeCount = self.CountParty()
+
+        self.pValPos1 = self.mr.FindOffsetData(self.base_ptr, self.offsets[0], 4).hex()
+
+        for x in range(0,self.pokeCount):
+            self.pokeList[x] = Pokemon(self.mr.FindOffsetData(self.base_ptr, self.offsets[x], 100).hex())
+
+    def Print_Info(self):
+        for x in range(0,self.pokeCount):
+            self.pokeList[x].print_basic_data()
+
+
+    def CountParty(self):
+        count  = 0
+
+        for offset in self.offsets:
+            val = self.mr.FindOffsetData(self.base_ptr, self.offsets[count], 4).hex()
+            if val == '00000000':
+                return count
+            count += 1
+        return count
+
+    def IsNewBattle(self):
+
+
+        
+        return self.pValPos1 != self.mr.FindOffsetData(self.base_ptr, self.offsets[0], 4).hex()
+        
