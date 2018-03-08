@@ -10,6 +10,7 @@ import time
 import Player
 import Overworld_Movement as om
 import PlayerInfo
+import PartyInfo
 
 import random # JUST FOR TESTING PURPOSES
 
@@ -22,18 +23,20 @@ window_id = SG.FindWindow()
 input("Once you load the rom press Enter to Continue")
 
 
-pinfo = PlayerInfo.PlayerInfo()
+playerInfo = PlayerInfo.PlayerInfo()
+pi = PartyInfo.PartyInfo()
+opi = PartyInfo.OpponentPartyInfo()
 
-worldLocation = pinfo.FindArea()
+worldLocation = playerInfo.FindArea()
 
 
 location = PF.Load_Area("..\\" + worldLocation + "_pyMap.pkl")
 
 
 player = Player.Player()
-player.pos = pinfo.FindCoords()
+player.pos = playerInfo.FindCoords()
 player.currentArea = worldLocation
-player.facing = pinfo.FindFacing()
+player.facing = playerInfo.FindFacing()
 
 player.printInfo()
 
@@ -41,12 +44,20 @@ player.printInfo()
 input("Ready to try transitioning. Press enter and select the emulator within 3 seconds to continue")
 time.sleep(3)
 
-movement = om.Overworld_Movement(player, location, window_id)
+movement = om.Overworld_Movement(playerInfo, pi, opi)
 
-movement.set_endPos((10,0))
-movement.Route_Player()
+movement.SetEndPos((10,0))
+movement.RoutePlayer()
 
-time.sleep(2)
+while True:
+    print("Input the X-coord, then the Y-Coord")
+    x = input()
+    y = input()
+    movement.SetEndPos((int(x),int(y)))
+    time.sleep(1)
+    movement.RoutePlayer()
+
+'''time.sleep(2)
 
 movement.TransitionToArea()
 
@@ -58,5 +69,5 @@ player.facing = pinfo.FindFacing()
 movement.player = player
 
 movement.set_endPos((9,1))
-movement.Route_Player()
+movement.Route_Player()'''
 

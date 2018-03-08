@@ -6,11 +6,131 @@ import ctypes
 import time
 import DirectKeys as dk
 import Pathfinding
-import TemplateMatch as tm
+'''import TemplateMatch as tm
 import ScreenGrab as sg
-import ImgSplit as IS
+import ImgSplit as IS'''
 import os
-import cv2
+'''import cv2'''
+import PlayerInfo
+import PartyInfo
+import _pickle as pickle
+
+class Overworld_Movement():
+
+    def __init__(self, _playerInfo, _partyInfo, _opponentPartyInfo):
+        self.playerInfo = _playerInfo
+        self.pi = _partyInfo
+        self.opi = _opponentPartyInfo
+        self.AreaName = self.playerInfo.FindArea()
+        self.LoadArea()
+
+    def CheckLocation(self):
+        #Check if player is still in the same area
+        _AreaName = self.playerInfo.FindArea()
+
+        #If they are in a different area, update area.
+        if self.AreaName != _AreaName:
+            self.AreaName = _AreaName
+            self.LoadArea()
+
+
+    def LoadArea(self):
+        dir  = "..\\" + self.AreaName + "_pyMap.pkl"
+        with open(dir, "rb") as file:
+            self.AreaData = pickle.load(file)
+
+    def SetEndPos(self,pos):
+        self.EndPos = pos
+
+    def RoutePlayer(self):
+        coords = self.playerInfo.FindCoords()
+        aStar = Pathfinding.AStar(self.AreaData,
+                                  self.AreaData[coords[1]][coords[0]],
+                                  self.AreaData[self.EndPos[1]][self.EndPos[0]]
+                                  )
+        print(aStar)
+        self.route = aStar.process()
+        print(self.route)
+
+        while len(self.route) > 0:
+            nextMove = self.route.pop()
+            coords = self.playerInfo.FindCoords()
+            time.sleep(0.1)
+            self.MovePlayer(coords,nextMove)
+
+            if self.BattleCheck():
+                input("Battle detected! Please complete the battle and then hit enter in python window. Once you hit enter you have 3 seconds to click on the emulator")
+                time.sleep(3)            
+            time.sleep(0.1)
+
+        pos = self.playerInfo.FindCoords()
+
+        if pos != self.EndPos:
+            print("Player not on correct tile. Attempting to re-route. (If this message pops up multiple times in a row the bot may be broken)")
+            self.RoutePlayer()
+
+    def BattleCheck(self):
+        return self.opi.IsNewBattle()
+
+
+    # The function responsible for choosing which direction the player takes to get to their next position.
+    def MovePlayer(self, pos,nextMove):
+        # Calculate next position to move
+        # face player in correct position
+        # EXTRA: LOOK AT TILE TO BE MOVED AT, IF NPC IS THERE, WAIT SOME TIME
+        if pos[0] < nextMove[0] and pos[1] == nextMove[1]:
+            self.Move_Right()            
+        elif pos[0] > nextMove[0] and pos[1] == nextMove[1]:
+            self.Move_Left()            
+        elif pos[1] < nextMove[1] and pos[0] == nextMove[0]:
+            self.Move_Down()            
+        elif pos[1] > nextMove[1] and pos[0] == nextMove[0]:
+            self.Move_Up()
+            
+        time.sleep(0.1) # Approx time it takes for player to move one time
+
+    def Move_Right(self):
+        facing = self.playerInfo.FindFacing()
+        if facing != 'east':
+            dk.Button_RIGHT()
+            print("Rotating player: RIGHT")
+        #self.CheckNextSquare(self.player.facing)
+        dk.Button_RIGHT()
+        print("Moving player: RIGHT")
+
+    def Move_Left(self):
+        facing = self.playerInfo.FindFacing()
+        if facing != 'west':
+            dk.Button_LEFT()
+            print("Rotating player: LEFT")
+        #self.CheckNextSquare(self.player.facing)
+        dk.Button_LEFT()
+        print("Moving player: LEFT")
+
+    def Move_Down(self):
+        facing = self.playerInfo.FindFacing()
+        if facing != 'south':
+            dk.Button_DOWN()
+            print("Rotating player: DOWN")
+        #self.CheckNextSquare(self.player.facing)
+        dk.Button_DOWN()
+        print("Moving player: DOWN")        
+
+    def Move_Up(self):
+        facing = self.playerInfo.FindFacing()
+        if facing != 'north':
+            dk.Button_UP()
+            print("Rotating player: UP")
+        #self.CheckNextSquare(self.player.facing)
+        dk.Button_UP()
+        print("Moving player: UP")
+
+
+        
+    # Checks the tile in font of the player to see whether there is an npc.
+    def CheckNextSquare(self, facing):
+        #TODO: Find npc positions on map.
+        return
 
 
 ###########################################################
@@ -32,6 +152,7 @@ import cv2
 # _window_id = The current windows id for the emulator.
 ##############################
 
+'''
 class Overworld_Movement():
 
     def __init__(self, _player, _area, _window_id):
@@ -267,3 +388,4 @@ class Overworld_Movement():
         else:
             print("No transition tile found at player location")
             
+'''

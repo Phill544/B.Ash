@@ -391,8 +391,14 @@ class OpponentPartyInfo():
         return count
 
     def IsNewBattle(self):
+        currentpVal = self.mr.FindOffsetData(self.base_ptr, self.offsets[0], 4).hex()
 
-
+        if self.pValPos1 != currentpVal:
+            self.pValPos1 = currentpVal
+            self.UpdateParty()
+            return True
+        else:
+            return False
         
-        return self.pValPos1 != self.mr.FindOffsetData(self.base_ptr, self.offsets[0], 4).hex()
-        
+    def IsWild(self,ot_id):
+        return self.pokeList[0].ot_id == ot_id
