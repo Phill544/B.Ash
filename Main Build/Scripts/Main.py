@@ -46,7 +46,13 @@ time.sleep(3)
 
 movement = om.Overworld_Movement(playerInfo, pi, opi)
 
-movement.SetEndPos((10,0))
+while True:
+    movement.SetEndPos((0,15))
+    movement.RoutePlayer()
+    movement.SetEndPos((4,15))
+    movement.RoutePlayer()
+
+'''movement.SetEndPos((10,0))
 movement.RoutePlayer()
 
 while True:
@@ -57,17 +63,5 @@ while True:
     time.sleep(1)
     movement.RoutePlayer()
 
-'''time.sleep(2)
-
-movement.TransitionToArea()
-
-player.pos = pinfo.FindCoords()
-worldLocation = pinfo.FindArea()
-player.currentArea = worldLocation
-player.facing = pinfo.FindFacing()
-
-movement.player = player
-
-movement.set_endPos((9,1))
-movement.Route_Player()'''
+'''
 
